@@ -1,6 +1,10 @@
 /**
  * Tiny Reify agent: uses LLM + Log + State under a sealed effect algebra.
  * Everything is reified. Everything is interpretable. Nothing is hidden.
+ *
+ * The LLM effect is model-agnostic. The `model` field is just data
+ * passed to whatever interpreter you plug in (OpenAI, Anthropic, Grok,
+ * local model, mock, etc.).
  */
 
 import { gen } from "../effect.js";
@@ -16,6 +20,7 @@ async function main() {
     const step = yield* Get<number>();
     yield* info(`Current step: ${step}`);
 
+    // model is optional and just a string — your interpreter decides what to do with it
     const answer = yield* LLM({
       messages: [
         {
@@ -23,7 +28,7 @@ async function main() {
           content: "In one sentence: what is a sealed effect algebra?",
         },
       ],
-      model: "grok",
+      // model: "gpt-4o" | "claude-3-5-sonnet" | "grok-4" | "llama3" | whatever
     });
 
     yield* info(`LLM said: ${answer}`);
@@ -35,6 +40,8 @@ async function main() {
     return answer;
   });
 
+  // Using a mock interpreter so this runs offline.
+  // Swap mockLLM for interpretLLM({ call: yourRealProvider }) when you want a real model.
   const interpreter = compose(
     compose(
       mockLLM([
