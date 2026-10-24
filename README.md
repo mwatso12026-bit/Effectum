@@ -2,17 +2,17 @@
 
 **A runtime with a sealed effect algebra that emits reified effects through composable interpreters and a Lean-verified trampoline where an LLM call is a possible effect.**
 
-You write pure programs. Effects are sealed, reified data. Interpreters are pure functions you compose. The trampoline is stack-safe and formally verified in Lean. Calling an LLM is just another effect — no special snowflake status, no hidden I/O, no “trust me bro”.
+You write pure programs. Effects are sealed, reified data. Interpreters are pure functions you compose. The trampoline is stack-safe and formally verified in Lean. Calling an LLM is just another effect — no special privileges, no hidden I/O.
 
 ## Why this exists
 
-Most “AI agent” runtimes are a pile of `await` spaghetti with side effects leaking everywhere. Reify flips the model:
+Most agent runtimes are a pile of `await` spaghetti with side effects leaking everywhere. Reify flips the model:
 
 - Effects are **data** (reified).
 - The algebra is **sealed** — you cannot invent new effects without extending the type.
 - Interpreters are **composable** — swap, stack, or mock them at will.
 - Recursion is **trampolined** and the trampoline is **Lean-verified**.
-- An LLM call is just `Effect.LLM(...)`. Treat it like any other effect.
+- An LLM call is just another effect. Treat it like any other effect.
 
 If you’re building agents that need to be auditable, testable, and not a ticking stack-overflow bomb, this is the foundation.
 
@@ -36,15 +36,29 @@ Effects are values. You can inspect them, log them, serialize them, replay them.
 
 ### Composable Interpreters
 
+Interpreters are just functions. Stack them, swap them, or replace them for tests.
+
 ```ts
 const interpreter = compose(
-  interpretLLM({ model: "grok" }),
+  interpretLLM({ call: yourProvider }),  // OpenAI, Anthropic, local, whatever
   interpretLog(console),
   interpretState(initial)
 );
 
 run(program, interpreter);
 ```
+
+Want to test without burning tokens? Drop in a mock:
+
+```ts
+const testInterpreter = compose(
+  mockLLM(["canned response 1", "canned response 2"]),
+  interpretLog(() => {}),
+  interpretState(0)
+);
+```
+
+Same program. Different interpreter. Zero changes to business logic.
 
 ### Lean-verified Trampoline
 
@@ -55,11 +69,11 @@ See `lean/Trampoline.lean`. The stack-safety theorem is proven. No more “it wo
 ```ts
 const answer = yield* LLM({
   messages: [{ role: "user", content: "Explain sealed effects" }],
-  model: "grok-4"
+  model: "gpt-4o"           // or claude, llama, grok, local — your interpreter decides
 });
 ```
 
-That’s it. No hidden network calls in your business logic.
+The effect is pure data. The model string is just a field. Your interpreter chooses the actual provider. No hard-coded vendor lock-in.
 
 ## Quick start
 
@@ -73,11 +87,11 @@ npm run example
 
 ```
 src/
-  effect.ts          # sealed effect algebra + free-ish construction
+  effect.ts          # sealed effect algebra
   trampoline.ts      # stack-safe evaluation
   interpreter.ts     # composable interpreter machinery
   effects/
-    llm.ts           # LLM effect + default interpreter
+    llm.ts           # LLM effect + mock + real interpreter hook
     log.ts
     state.ts
   examples/
