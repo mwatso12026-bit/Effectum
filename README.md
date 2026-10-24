@@ -1,14 +1,12 @@
-# Pulse Effect Runtime
+# Reify
 
 **A runtime with a sealed effect algebra that emits reified effects through composable interpreters and a Lean-verified trampoline where an LLM call is a possible effect.**
-
-This is the core engine behind the **Pulse** developer build program.
 
 You write pure programs. Effects are sealed, reified data. Interpreters are pure functions you compose. The trampoline is stack-safe and formally verified in Lean. Calling an LLM is just another effect — no special snowflake status, no hidden I/O, no “trust me bro”.
 
 ## Why this exists
 
-Most “AI agent” runtimes are a pile of `await` spaghetti with side effects leaking everywhere. Pulse flips the model:
+Most “AI agent” runtimes are a pile of `await` spaghetti with side effects leaking everywhere. Reify flips the model:
 
 - Effects are **data** (reified).
 - The algebra is **sealed** — you cannot invent new effects without extending the type.
@@ -88,11 +86,6 @@ lean/
   Trampoline.lean    # formal verification of the trampoline
 ```
 
-## Pulse
+## License
 
-This runtime is the beating heart of the **Pulse** developer build program.
-If you’re shipping agents, tools, or any system that needs effects under control, start here.
-
-Star it. Fork it. Break it. Build on it.
-
-— Pulse
+MIT

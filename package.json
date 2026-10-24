@@ -1,5 +1,5 @@
 {
-  "name": "pulse-effect-runtime",
+  "name": "reify",
   "version": "0.1.0",
   "description": "Sealed effect algebra runtime with reified effects, composable interpreters, and a Lean-verified trampoline. LLM calls are just effects.",
   "type": "module",
@@ -17,7 +17,8 @@
     "lean",
     "llm",
     "agents",
-    "pulse"
+    "reify",
+    "sealed-effects"
   ],
   "license": "MIT",
   "devDependencies": {

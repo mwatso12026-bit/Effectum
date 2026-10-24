@@ -1,5 +1,5 @@
 /-
-  Pulse Effect Runtime — Lean-verified trampoline
+  Reify — Lean-verified trampoline
 
   We model a simple trampoline and prove that `run` always terminates
   when the fuel is sufficient (and that the operational steps mirror
@@ -39,7 +39,7 @@ theorem runFuel_bind {α β} (t : Trampoline α) (f : α → Trampoline β)
     (h₂ : runFuel m (f a) = some b) :
     ∃ k, runFuel k (bind t f) = some b := by
   -- Sketch: by induction on the structure of t.
-  -- Full mechanisation left as an exercise for the Pulse formal methods track.
+  -- Full mechanisation left as an exercise for the formal methods track.
   sorry
 
 /-- The TypeScript `runTrampoline` corresponds to `runFuel` with unbounded fuel
