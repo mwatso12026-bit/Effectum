@@ -1,8 +1,13 @@
 # Reify
 
-**A runtime with a sealed effect algebra that emits reified effects through composable interpreters and a Lean-verified trampoline where an LLM call is a possible effect.**
+**Local-first sealed effect runtime for controlled, testable, auditable AI agents.**
 
-You write pure programs. Effects are sealed, reified data. Interpreters are pure functions you compose. The trampoline is stack-safe and formally verified in Lean. Calling an LLM is just another effect — no special privileges, no hidden I/O.
+You write pure programs. Effects are sealed, reified data. Interpreters are pure functions you compose. The trampoline is stack-safe. An LLM call is just another effect — no special privileges, no hidden I/O.
+
+> **Open-core boundary (read this first)**  
+> Everything under `src/` and `lean/` is **MIT and free forever** for commercial and personal use.  
+> Hosted multi-tenant interpreters, managed background reconsolidation workers, team memory spaces, enterprise policy engines, and the web dashboard are **commercial** (Reify Cloud / Enterprise).  
+> The MIT core has zero external infrastructure dependencies and can run fully offline.
 
 ## Why this exists
 
@@ -11,10 +16,28 @@ Most agent runtimes are a pile of `await` spaghetti with side effects leaking ev
 - Effects are **data** (reified).
 - The algebra is **sealed** — you cannot invent new effects without extending the type.
 - Interpreters are **composable** — swap, stack, or mock them at will.
-- Recursion is **trampolined** and the trampoline is **Lean-verified**.
+- Recursion is **trampolined** (Lean formalization in progress; currently contains a `sorry` on the bind theorem).
 - An LLM call is just another effect. Treat it like any other effect.
 
 If you’re building agents that need to be auditable, testable, and not a ticking stack-overflow bomb, this is the foundation.
+
+## What is free (MIT core)
+
+- Sealed effect algebra and reified effects
+- Composable interpreter machinery
+- Stack-safe trampoline (TypeScript implementation)
+- Basic effects: LLM (mock + hook), Log, State
+- Local example agent
+- Lean trampoline model (partial proof)
+
+## What is commercial
+
+- Managed cloud interpreters and provider routing
+- Automated background reconsolidation / memory workers
+- Multi-tenant Postgres adapter and team spaces
+- Policy / approval gateways with audit logs
+- Web dashboard for effect traces and memory graphs
+- Enterprise SLA, on-prem, and custom connectors
 
 ## Core ideas
 
@@ -60,9 +83,9 @@ const testInterpreter = compose(
 
 Same program. Different interpreter. Zero changes to business logic.
 
-### Lean-verified Trampoline
+### Trampoline
 
-See `lean/Trampoline.lean`. The stack-safety theorem is proven. No more “it works on my machine until the call stack dies”.
+See `lean/Trampoline.lean`. The TypeScript runtime uses a trampoline for stack safety. The Lean model currently contains a `sorry` on the bind theorem; the claim of full formal verification is not yet complete.
 
 ### LLM as Effect
 
@@ -75,7 +98,7 @@ const answer = yield* LLM({
 
 The effect is pure data. The model string is just a field. Your interpreter chooses the actual provider. No hard-coded vendor lock-in.
 
-## Quick start
+## Quick start (MIT core only)
 
 ```bash
 npm install
@@ -87,19 +110,20 @@ npm run example
 
 ```
 src/
-  effect.ts          # sealed effect algebra
-  trampoline.ts      # stack-safe evaluation
-  interpreter.ts     # composable interpreter machinery
+  effect.ts          # sealed effect algebra (MIT)
+  trampoline.ts      # stack-safe evaluation (MIT)
+  interpreter.ts     # composable interpreter machinery (MIT)
   effects/
-    llm.ts           # LLM effect + mock + real interpreter hook
+    llm.ts           # LLM effect + mock + real interpreter hook (MIT)
     log.ts
     state.ts
   examples/
-    agent.ts         # tiny agent that uses LLM + Log + State
+    agent.ts         # tiny agent that uses LLM + Log + State (MIT)
 lean/
-  Trampoline.lean    # formal verification of the trampoline
+  Trampoline.lean    # formal model of the trampoline (MIT, proof incomplete)
 ```
 
 ## License
 
-MIT
+Core (`src/`, `lean/`, this repository as currently structured) is MIT.  
+See LICENSE for details. Commercial features live outside this repository.
