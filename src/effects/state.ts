@@ -1,6 +1,7 @@
 import { perform } from "../effect.js";
 import type { Effect } from "../effect.js";
 import type { Interpreter } from "../interpreter.js";
+import { NotAnEffectError } from "../interpreter.js";
 
 export type Get = { readonly _tag: "Get" };
 export type Put<S> = { readonly _tag: "Put"; readonly value: S };
@@ -20,6 +21,6 @@ export const interpretState = <S>(initial: S): Interpreter<State<S>> => {
       state = effect.value;
       return undefined;
     }
-    throw new Error("Not a State effect");
+    throw new NotAnEffectError();
   };
 };
