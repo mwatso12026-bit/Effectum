@@ -1,10 +1,16 @@
 {
   "name": "reify",
   "version": "0.1.0",
-  "description": "Sealed effect algebra runtime with reified effects, composable interpreters, and a Lean-verified trampoline. LLM calls are just effects.",
+  "description": "Local single-user sealed effect algebra runtime. Reified effects, composable interpreters, stack-safe trampoline. LLM calls are just effects. MIT core.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "lean"
+  ],
   "scripts": {
     "build": "tsc",
     "example": "tsx src/examples/agent.ts",
@@ -18,7 +24,8 @@
     "llm",
     "agents",
     "reify",
-    "sealed-effects"
+    "sealed-effects",
+    "local-first"
   ],
   "license": "MIT",
   "devDependencies": {
