@@ -1,13 +1,15 @@
 # Reify
 
-**Local-first sealed effect runtime for controlled, testable, auditable AI agents.**
+**Local single-user sealed effect runtime for controlled, testable, auditable AI agents.**
 
 You write pure programs. Effects are sealed, reified data. Interpreters are pure functions you compose. The trampoline is stack-safe. An LLM call is just another effect — no special privileges, no hidden I/O.
+
+The MIT core is designed for **local, single-user downloads and execution**. Clone or install, run offline with mocks, no accounts, no multi-tenant, no external infrastructure required.
 
 > **Open-core boundary (read this first)**  
 > Everything under `src/` and `lean/` is **MIT and free forever** for commercial and personal use.  
 > Hosted multi-tenant interpreters, managed background reconsolidation workers, team memory spaces, enterprise policy engines, and the web dashboard are **commercial** (Reify Cloud / Enterprise).  
-> The MIT core has zero external infrastructure dependencies and can run fully offline.
+> The MIT core has zero external infrastructure dependencies and runs fully offline on a single machine.
 
 ## Why this exists
 
@@ -16,19 +18,19 @@ Most agent runtimes are a pile of `await` spaghetti with side effects leaking ev
 - Effects are **data** (reified).
 - The algebra is **sealed** — you cannot invent new effects without extending the type.
 - Interpreters are **composable** — swap, stack, or mock them at will.
-- Recursion is **trampolined** (Lean formalization in progress; currently contains a `sorry` on the bind theorem).
+- Recursion is **trampolined** (Lean formalization is a sketch; the bind theorem remains incomplete).
 - An LLM call is just another effect. Treat it like any other effect.
 
 If you’re building agents that need to be auditable, testable, and not a ticking stack-overflow bomb, this is the foundation.
 
-## What is free (MIT core)
+## What is free (MIT core — local single-user)
 
 - Sealed effect algebra and reified effects
-- Composable interpreter machinery
+- Composable interpreter machinery (real errors are no longer masked)
 - Stack-safe trampoline (TypeScript implementation)
 - Basic effects: LLM (mock + hook), Log, State
-- Local example agent
-- Lean trampoline model (partial proof)
+- Local example agent that runs fully offline
+- Lean trampoline model (partial / sketch)
 
 ## What is commercial
 
@@ -60,6 +62,7 @@ Effects are values. You can inspect them, log them, serialize them, replay them.
 ### Composable Interpreters
 
 Interpreters are just functions. Stack them, swap them, or replace them for tests.
+Handlers throw `NotAnEffectError` for mismatches; real errors propagate.
 
 ```ts
 const interpreter = compose(
@@ -85,7 +88,7 @@ Same program. Different interpreter. Zero changes to business logic.
 
 ### Trampoline
 
-See `lean/Trampoline.lean`. The TypeScript runtime uses a trampoline for stack safety. The Lean model currently contains a `sorry` on the bind theorem; the claim of full formal verification is not yet complete.
+See `lean/Trampoline.lean`. The TypeScript runtime uses a trampoline for stack safety. The Lean model is a formal sketch; the full bind theorem is not yet complete.
 
 ### LLM as Effect
 
@@ -98,12 +101,21 @@ const answer = yield* LLM({
 
 The effect is pure data. The model string is just a field. Your interpreter chooses the actual provider. No hard-coded vendor lock-in.
 
-## Quick start (MIT core only)
+## Quick start (MIT core — local single-user)
 
 ```bash
+git clone https://github.com/mwatso12026-bit/Reify.git
+cd Reify
 npm install
 npm run build
-npm run example
+npm run example   # offline mock agent
+npm test          # local single-user tests
+```
+
+Or, once published:
+
+```bash
+npm install reify
 ```
 
 ## Repo layout
@@ -118,9 +130,10 @@ src/
     log.ts
     state.ts
   examples/
-    agent.ts         # tiny agent that uses LLM + Log + State (MIT)
+    agent.ts         # tiny local agent (MIT)
+    agent.test.ts    # local single-user test (MIT)
 lean/
-  Trampoline.lean    # formal model of the trampoline (MIT, proof incomplete)
+  Trampoline.lean    # formal sketch of the trampoline (MIT)
 ```
 
 ## License
