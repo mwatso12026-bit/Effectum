@@ -2,6 +2,7 @@
  * Tiny Reify agent: uses LLM + Log + State under a sealed effect algebra.
  * Everything is reified. Everything is interpretable. Nothing is hidden.
  *
+ * Local single-user example. Runs fully offline with the mock interpreter.
  * The LLM effect is model-agnostic. The `model` field is just data
  * passed to whatever interpreter you plug in (OpenAI, Anthropic, Grok,
  * local model, mock, etc.).
@@ -40,7 +41,7 @@ async function main() {
     return answer;
   });
 
-  // Using a mock interpreter so this runs offline.
+  // Using a mock interpreter so this runs offline and single-user local.
   // Swap mockLLM for interpretLLM({ call: yourRealProvider }) when you want a real model.
   const interpreter = compose(
     compose(
@@ -52,7 +53,7 @@ async function main() {
     interpretState(0)
   );
 
-  const result = await run(program as any, interpreter as any);
+  const result = await run(program, interpreter);
   console.log("\nFinal result:", result);
 }
 
