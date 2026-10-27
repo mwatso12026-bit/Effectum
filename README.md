@@ -115,7 +115,7 @@ npm test          # local single-user tests
 Or, once published:
 
 ```bash
-npm install reify
+npm install @reify/core
 ```
 
 ## Repo layout
