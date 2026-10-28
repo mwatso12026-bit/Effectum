@@ -1,5 +1,5 @@
 /**
- * Tiny Reify agent: uses LLM + Log + State under a sealed effect algebra.
+ * Tiny Effectum agent: uses LLM + Log + State under a sealed effect algebra.
  * Everything is reified. Everything is interpretable. Nothing is hidden.
  *
  * Local single-user example. Runs fully offline with the mock interpreter.
@@ -16,7 +16,7 @@ import { Get, Put, interpretState } from "../effects/state.js";
 
 async function main() {
   const program = gen(function* () {
-    yield* info("Reify agent starting");
+    yield* info("Effectum agent starting");
 
     const step = yield* Get<number>();
     yield* info(`Current step: ${step}`);
