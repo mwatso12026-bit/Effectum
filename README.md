@@ -1,4 +1,4 @@
-# Reify
+# Effectum
 
 **Local single-user sealed effect runtime for controlled, testable, auditable AI agents.**
 
@@ -8,12 +8,12 @@ The MIT core is designed for **local, single-user downloads and execution**. Clo
 
 > **Open-core boundary (read this first)**  
 > Everything under `src/` and `lean/` is **MIT and free forever** for commercial and personal use.  
-> Hosted multi-tenant interpreters, managed background reconsolidation workers, team memory spaces, enterprise policy engines, and the web dashboard are **commercial** (Reify Cloud / Enterprise).  
+> Hosted multi-tenant interpreters, managed background reconsolidation workers, team memory spaces, enterprise policy engines, and the web dashboard are **commercial** (Effectum Cloud / Enterprise).  
 > The MIT core has zero external infrastructure dependencies and runs fully offline on a single machine.
 
 ## Why this exists
 
-Most agent runtimes are a pile of `await` spaghetti with side effects leaking everywhere. Reify flips the model:
+Most agent runtimes are a pile of `await` spaghetti with side effects leaking everywhere. Effectum flips the model:
 
 - Effects are **data** (reified).
 - The algebra is **sealed** — you cannot invent new effects without extending the type.
@@ -104,8 +104,8 @@ The effect is pure data. The model string is just a field. Your interpreter choo
 ## Quick start (MIT core — local single-user)
 
 ```bash
-git clone https://github.com/mwatso12026-bit/Reify.git
-cd Reify
+git clone https://github.com/mwatso12026-bit/Effectum.git
+cd Effectum
 npm install
 npm run build
 npm run example   # offline mock agent
@@ -115,7 +115,7 @@ npm test          # local single-user tests
 Or, once published:
 
 ```bash
-npm install @reify/core
+npm install effectum
 ```
 
 ## Repo layout
