@@ -6,10 +6,12 @@ You describe programs using explicit effect requests. Interpreters handle those 
 
 The MIT core is designed for **local, single-user downloads and execution**. Clone or install, run offline with mocks, no accounts, no multi-tenant, no external infrastructure required.
 
-> **Open-core boundary (read this first)**  
-> Everything under `src/` and `lean/` is **MIT and free forever** for commercial and personal use.  
-> Hosted multi-tenant interpreters, managed background reconsolidation workers, team memory spaces, enterprise policy engines, and the web dashboard are **commercial** (Effectum Cloud / Enterprise).  
+> **Open-core boundary (read this first)**
+> This public repository is **MIT**, including publicly committed local persistence, execution controls, policy callbacks, traces, and examples. MIT permits commercial use, modification, and redistribution; “local single-user” describes the supplied implementation, not a license restriction.
+> Future company applications and managed services will be developed separately in a **private commercial repository**. Paid offerings will fund development, support, operations, and a sustainable margin; they are **not promised at cost**. No paid plans or prices are available yet.
 > The MIT core has zero external infrastructure dependencies and runs fully offline on a single machine.
+
+See [product and commercial boundaries](COMMERCIAL_BOUNDARIES.md) for the free/paid scope and licensing rules.
 
 ## Why this exists
 
@@ -37,7 +39,7 @@ If you’re building agents that need to be auditable, testable, and not a ticki
 - Advanced MCP server (stdio, local single-user tools)
 - Lean trampoline model (partial / sketch)
 
-## What is commercial
+## Planned commercial offerings (not included here)
 
 - Managed cloud interpreters and provider routing
 - Automated background reconsolidation / memory workers
@@ -173,6 +175,6 @@ lean/
 
 ## License
 
-Core (`src/`, `lean/`, this repository as currently structured) is MIT.  
-See LICENSE for details. Commercial features live outside this repository.
+Core (`src/`, `lean/`, this repository as currently structured) is MIT.
+See LICENSE for details. Publicly committed MIT code remains MIT. Future proprietary applications and managed-service implementations are developed separately; the list above is a roadmap, not a claim that these services already exist.
 

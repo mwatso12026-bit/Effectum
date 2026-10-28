@@ -14,6 +14,7 @@
   "files": [
     "dist",
     "README.md",
+    "COMMERCIAL_BOUNDARIES.md",
     "LICENSE",
     "docs",
     "lean"
