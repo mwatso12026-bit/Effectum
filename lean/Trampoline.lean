@@ -1,5 +1,5 @@
 /-
-  Reify — Lean model of the trampoline
+  Effectum — Lean model of the trampoline
 
   We model a simple trampoline and prove basic properties.
   The full bind theorem is still incomplete (previously contained sorry).
