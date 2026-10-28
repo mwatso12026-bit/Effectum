@@ -1,8 +1,6 @@
 /**
  * Local single-user MCP server for Effectum.
- * Defensive tool handlers. Shared in-memory store.
- *
- * Run with: npm run mcp
+ * Uses yield (not yield*) so the generator algebra works.
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -123,7 +121,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return { content: [{ type: "text", text: "id and content required" }] };
       }
       const program = gen(function* () {
-        yield* writeMemory({
+        yield writeMemory({
           id,
           content,
           importance: Number(args.importance ?? 1),
@@ -138,7 +136,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     if (name === "memory_read") {
       const id = String(args.id ?? "");
       const program = gen(function* () {
-        return yield* readMemory(id);
+        return yield readMemory(id);
       });
       const result = await run(program, memoryInterpreter);
       return {
@@ -153,7 +151,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     if (name === "memory_list") {
       const program = gen(function* () {
-        return yield* listMemory();
+        return yield listMemory();
       });
       const result = await run(program, memoryInterpreter);
       return {
@@ -164,7 +162,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     if (name === "memory_search") {
       const query = String(args.query ?? "");
       const program = gen(function* () {
-        return yield* searchMemory(query);
+        return yield searchMemory(query);
       });
       const result = await run(program, memoryInterpreter);
       return {
