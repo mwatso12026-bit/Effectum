@@ -28,9 +28,9 @@ If you’re building agents that need to be auditable, testable, and not a ticki
 - Sealed effect algebra and reified effects
 - Composable interpreter machinery (real errors are no longer masked)
 - Stack-safe trampoline (TypeScript implementation)
-- Basic effects: LLM (mock + hook), Log, State, Memory (active reconsolidation on write)
+- Basic effects: LLM (mock + hook), Log, State, Memory (active reconsolidation on write, list, search)
 - Local example agent that runs fully offline
-- Expanded MCP server (stdio, local single-user tools)
+- Advanced MCP server (stdio, local single-user tools)
 - Lean trampoline model (partial / sketch)
 
 ## What is commercial
@@ -112,9 +112,13 @@ Tools:
 
 - `memory_write` — write a node with active reconsolidation
 - `memory_read` — read a node by id
+- `memory_list` — list all nodes
+- `memory_search` — substring search on content or id
 - `state_get` / `state_set` — agent step counter
 - `log` / `get_logs` — append and retrieve recent logs
 - `run_mock_agent` — richer offline agent that uses state + memory + mock LLM
+- `effect_trace` — run a small program and return a simple reified step summary
+- `get_traces` — return recent traces
 
 ```bash
 npm install
@@ -148,12 +152,12 @@ src/
   effect.ts          # sealed effect algebra (MIT)
   trampoline.ts      # stack-safe evaluation (MIT)
   interpreter.ts     # composable interpreter machinery (MIT)
-  mcp.ts             # local MCP server with expanded tools (MIT)
+  mcp.ts             # local MCP server with advanced tools (MIT)
   effects/
     llm.ts           # LLM effect + mock + real interpreter hook (MIT)
     log.ts
     state.ts
-    memory.ts        # active reconsolidation on write (MIT)
+    memory.ts        # active reconsolidation + list + search (MIT)
   examples/
     agent.ts         # tiny local agent (MIT)
     agent.test.ts    # local single-user test (MIT)
