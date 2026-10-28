@@ -30,7 +30,7 @@ If you’re building agents that need to be auditable, testable, and not a ticki
 - Stack-safe trampoline (TypeScript implementation)
 - Basic effects: LLM (mock + hook), Log, State, Memory (active reconsolidation on write)
 - Local example agent that runs fully offline
-- Minimal MCP server (stdio, local single-user tools)
+- Expanded MCP server (stdio, local single-user tools)
 - Lean trampoline model (partial / sketch)
 
 ## What is commercial
@@ -104,13 +104,17 @@ const answer = yield* LLM({
 
 The effect is pure data. The model string is just a field. Your interpreter chooses the actual provider. No hard-coded vendor lock-in.
 
-## Minimal MCP server (local single-user)
+## MCP server (local single-user)
 
-A thin stdio MCP server is included. It exposes:
+A stdio MCP server is included. Shared in-memory store so writes persist across calls in one process.
+
+Tools:
 
 - `memory_write` — write a node with active reconsolidation
 - `memory_read` — read a node by id
-- `run_mock_agent` — run the offline example agent
+- `state_get` / `state_set` — agent step counter
+- `log` / `get_logs` — append and retrieve recent logs
+- `run_mock_agent` — richer offline agent that uses state + memory + mock LLM
 
 ```bash
 npm install
@@ -144,7 +148,7 @@ src/
   effect.ts          # sealed effect algebra (MIT)
   trampoline.ts      # stack-safe evaluation (MIT)
   interpreter.ts     # composable interpreter machinery (MIT)
-  mcp.ts             # minimal local MCP server (MIT)
+  mcp.ts             # local MCP server with expanded tools (MIT)
   effects/
     llm.ts           # LLM effect + mock + real interpreter hook (MIT)
     log.ts
