@@ -13,12 +13,12 @@ import { Get, Put, interpretState } from "../effects/state.js";
 describe("local single-user agent", () => {
   it("runs the mock agent and returns the canned answer", async () => {
     const program = gen(function* () {
-      yield* info("test start");
-      const step = yield* Get<number>();
-      const answer = yield* LLM({
+      yield info("test start");
+      const step = yield Get<number>();
+      const answer = yield LLM({
         messages: [{ role: "user", content: "test" }],
       });
-      yield* Put(step + 1);
+      yield Put(step + 1);
       return answer;
     });
 

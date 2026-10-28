@@ -72,15 +72,23 @@ export const map = <A, B, R>(
   f: (a: A) => B
 ): Effect<B, R> => flatMap(ma, (a) => Pure(f(a)));
 
-/** Generator-style syntax sugar. */
-export function* gen<A, R>(
-  f: () => Generator<Effect<any, R>, A, any>
-): Effect<A, R> {
+/** Extract the sealed row from each yielded effect (including mixed rows). */
+type EffectRow<E> = E extends Impure<infer R, any>
+  ? R
+  : E extends Suspend<any, infer R>
+    ? R
+    : never;
+
+/** Generator-style syntax sugar: use `yield`, not `yield*`, for effects. */
+export function gen<A, E extends Effect<any, any>>(
+  f: () => Generator<E, A, any>
+): Effect<A, EffectRow<E>> {
+  type R = EffectRow<E>;
   const iter = f();
   const step = (value?: unknown): Effect<A, R> => {
     const result = iter.next(value);
     if (result.done) return Pure(result.value);
-    return flatMap(result.value, step);
+    return flatMap(result.value as Effect<any, R>, step);
   };
   return Suspend(() => step());
 }

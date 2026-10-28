@@ -16,13 +16,13 @@ import { Get, Put, interpretState } from "../effects/state.js";
 
 async function main() {
   const program = gen(function* () {
-    yield* info("Effectum agent starting");
+    yield info("Effectum agent starting");
 
-    const step = yield* Get<number>();
-    yield* info(`Current step: ${step}`);
+    const step = yield Get<number>();
+    yield info(`Current step: ${step}`);
 
     // model is optional and just a string — your interpreter decides what to do with it
-    const answer = yield* LLM({
+    const answer = yield LLM({
       messages: [
         {
           role: "user",
@@ -32,11 +32,11 @@ async function main() {
       // model: "gpt-4o" | "claude-3-5-sonnet" | "grok-4" | "llama3" | whatever
     });
 
-    yield* info(`LLM said: ${answer}`);
-    yield* Put(step + 1);
+    yield info(`LLM said: ${answer}`);
+    yield Put(step + 1);
 
-    const next = yield* Get<number>();
-    yield* info(`Next step will be: ${next}`);
+    const next = yield Get<number>();
+    yield info(`Next step will be: ${next}`);
 
     return answer;
   });
