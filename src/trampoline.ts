@@ -1,6 +1,6 @@
 /**
  * Stack-safe trampoline for evaluating Effects.
- * Corresponds to the Lean-verified construction in lean/Trampoline.lean.
+ * Related Lean model: lean/Trampoline.lean (incomplete proof sketch).
  */
 
 import type { Effect } from "./effect.js";
@@ -30,8 +30,9 @@ export function runTrampoline<A>(t: Trampoline<A>): A {
 
 /**
  * Convert an Effect into a Trampoline by suspending every step.
- * This is the operational semantics that Lean proves terminates
- * and is stack-safe under the usual coinductive assumptions.
+ * Evaluation uses iterative suspension and Promise continuations.
+ * The Lean sketch does not prove this TypeScript implementation correct
+ * or guarantee termination of arbitrary programs.
  */
 export function effectToTrampoline<A, R>(
   effect: Effect<A, R>,
@@ -57,3 +58,4 @@ export function effectToTrampoline<A, R>(
   };
   return go(effect);
 }
+

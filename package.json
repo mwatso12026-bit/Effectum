@@ -5,17 +5,26 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "effectum-mcp": "dist/mcp.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "files": [
     "dist",
     "README.md",
+    "COMMERCIAL_BOUNDARIES.md",
     "LICENSE",
+    "docs",
     "lean"
   ],
   "scripts": {
     "build": "tsc",
-    "example": "tsx src/examples/agent.ts",
-    "test": "tsx --test src/**/*.test.ts",
-    "mcp": "tsx src/mcp.ts"
+    "example": "npm run build && node dist/examples/agent.js",
+    "test": "npm run build && node --test \"dist/**/*.test.js\"",
+    "mcp": "npm run build && node dist/mcp.js",
+    "prepack": "npm run build"
   },
   "keywords": [
     "effects",
@@ -43,3 +52,4 @@
     "@types/node": "^22.0.0"
   }
 }
+

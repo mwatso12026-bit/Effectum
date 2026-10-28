@@ -2,14 +2,16 @@
 
 **Local single-user sealed effect runtime for controlled, testable, auditable AI agents.**
 
-You write pure programs. Effects are sealed, reified data. Interpreters are pure functions you compose. The trampoline is stack-safe. An LLM call is just another effect — no special privileges, no hidden I/O.
+You describe programs using explicit effect requests. Interpreters handle those requests and can perform I/O. An LLM call is another effect request, routed through the interpreter you supply. This is an application architecture, not a sandbox for untrusted JavaScript.
 
 The MIT core is designed for **local, single-user downloads and execution**. Clone or install, run offline with mocks, no accounts, no multi-tenant, no external infrastructure required.
 
-> **Open-core boundary (read this first)**  
-> Everything under `src/` and `lean/` is **MIT and free forever** for commercial and personal use.  
-> Hosted multi-tenant interpreters, managed background reconsolidation workers, team memory spaces, enterprise policy engines, and the web dashboard are **commercial** (Effectum Cloud / Enterprise).  
+> **Open-core boundary (read this first)**
+> This public repository is **MIT**, including publicly committed local persistence, execution controls, policy callbacks, traces, and examples. MIT permits commercial use, modification, and redistribution; “local single-user” describes the supplied implementation, not a license restriction.
+> Future company applications and managed services will be developed separately in a **private commercial repository**. Paid offerings will fund development, support, operations, and a sustainable margin; they are **not promised at cost**. No paid plans or prices are available yet.
 > The MIT core has zero external infrastructure dependencies and runs fully offline on a single machine.
+
+See [product and commercial boundaries](COMMERCIAL_BOUNDARIES.md) for the free/paid scope and licensing rules.
 
 ## Why this exists
 
@@ -28,17 +30,21 @@ If you’re building agents that need to be auditable, testable, and not a ticki
 - Sealed effect algebra and reified effects
 - Composable interpreter machinery (real errors are no longer masked)
 - Stack-safe trampoline (TypeScript implementation)
+- Optional execution step limits and cooperative cancellation through `run` ([usage](docs/execution-controls.md))
+- Local per-effect permissions and approval callbacks ([usage and offline demo](docs/permissions.md))
+- Bounded local execution traces with metadata-only JSON export ([usage and demo](docs/execution-traces.md))
 - Basic effects: LLM (mock + hook), Log, State, Memory (active reconsolidation on write, list, search)
+- Optional local JSON memory persistence, with atomic replacement and a previous-version backup
 - Local example agent that runs fully offline
 - Advanced MCP server (stdio, local single-user tools)
 - Lean trampoline model (partial / sketch)
 
-## What is commercial
+## Planned commercial offerings (not included here)
 
 - Managed cloud interpreters and provider routing
 - Automated background reconsolidation / memory workers
 - Multi-tenant Postgres adapter and team spaces
-- Policy / approval gateways with audit logs
+- Hosted organization-wide policy / approval gateways with managed audit logs
 - Web dashboard for effect traces and memory graphs
 - Enterprise SLA, on-prem, and custom connectors
 
@@ -58,7 +64,7 @@ type EffectRow = LLM | Log | State | Memory | ...;
 
 ### Reified Effects
 
-Effects are values. You can inspect them, log them, serialize them, replay them.
+Effect requests are values you can inspect and log. JSON-compatible request payloads can be serialized; complete programs contain functions and cannot be serialized directly. Durable execution and deterministic replay are not implemented.
 
 ### Composable Interpreters
 
@@ -66,9 +72,9 @@ Interpreters are just functions. Stack them, swap them, or replace them for test
 Handlers throw `NotAnEffectError` for mismatches; real errors propagate.
 
 ```ts
-const interpreter = compose(
+const interpreter = composeMany(
   interpretLLM({ call: yourProvider }),  // OpenAI, Anthropic, local, whatever
-  interpretLog(console),
+  interpretLog((level, message) => console.log(`[${level}] ${message}`)),
   interpretState(initial),
   interpretMemory()
 );
@@ -79,7 +85,7 @@ run(program, interpreter);
 Want to test without burning tokens? Drop in a mock:
 
 ```ts
-const testInterpreter = compose(
+const testInterpreter = composeMany(
   mockLLM(["canned response 1", "canned response 2"]),
   interpretLog(() => {}),
   interpretState(0),
@@ -96,7 +102,8 @@ See `lean/Trampoline.lean`. The TypeScript runtime uses a trampoline for stack s
 ### LLM as Effect
 
 ```ts
-const answer = yield* LLM({
+// Inside gen(function* () { ... }), use yield rather than yield*.
+const answer = yield LLM({
   messages: [{ role: "user", content: "Explain sealed effects" }],
   model: "gpt-4o"           // or claude, llama, grok, local — your interpreter decides
 });
@@ -106,7 +113,7 @@ The effect is pure data. The model string is just a field. Your interpreter choo
 
 ## MCP server (local single-user)
 
-A stdio MCP server is included. Shared in-memory store so writes persist across calls in one process.
+A stdio MCP server is included. By default memory, state, and logs are in RAM and are lost when the process exits. Set `EFFECTUM_MEMORY_FILE` to an absolute file path to retain memory across restarts. State and logs remain in RAM. See [local memory storage](docs/local-memory.md) for setup, backup, and recovery.
 
 Tools:
 
@@ -116,34 +123,35 @@ Tools:
 - `memory_search` — substring search on content or id
 - `state_get` / `state_set` — agent step counter
 - `log` / `get_logs` — append and retrieve recent logs
-- `run_mock_agent` — richer offline agent that uses state + memory + mock LLM
-- `effect_trace` — run a small program and return a simple reified step summary
-- `get_traces` — return recent traces
 
 ```bash
 npm install
 npm run mcp
 ```
 
-Point Cursor, Claude Desktop, or any MCP client at the stdio process. No accounts, no network required for the mock tools.
+Point Cursor, Claude Desktop, or any MCP client at the stdio process. After building, launch it with `node dist/mcp.js` so npm build output does not enter the MCP protocol stream. No accounts or network are required for these local tools.
 
 ## Quick start (MIT core — local single-user)
 
 ```bash
 git clone https://github.com/mwatso12026-bit/Effectum.git
 cd Effectum
-npm install
+npm ci
 npm run build
 npm run example   # offline mock agent
 npm test          # local single-user tests
 npm run mcp       # local MCP server
 ```
 
-Or, once published:
+For an available npm release:
 
 ```bash
 npm install effectum
 ```
+
+The source checkout can also produce an installable package without npm login: `npm pack`. Packaging builds the JavaScript automatically. The package includes an `effectum-mcp` command for the local MCP server.
+
+See [Windows local testing](docs/windows-local-testing.md) for GitHub Desktop, VS Code, package installation, and MCP configuration.
 
 ## Repo layout
 
@@ -167,5 +175,6 @@ lean/
 
 ## License
 
-Core (`src/`, `lean/`, this repository as currently structured) is MIT.  
-See LICENSE for details. Commercial features live outside this repository.
+Core (`src/`, `lean/`, this repository as currently structured) is MIT.
+See LICENSE for details. Publicly committed MIT code remains MIT. Future proprietary applications and managed-service implementations are developed separately; the list above is a roadmap, not a claim that these services already exist.
+
