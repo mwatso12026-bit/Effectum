@@ -14,7 +14,10 @@ permissions:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,10 +25,11 @@ jobs:
           node-version: '22'
           registry-url: https://registry.npmjs.org
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Build TypeScript
         run: npm run build
       - name: Run tests
         run: npm test
       - name: Inspect publish package
         run: npm pack --dry-run
+
