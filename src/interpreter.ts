@@ -8,7 +8,7 @@
  */
 
 import type { Effect } from "./effect.js";
-import { effectToTrampoline, runTrampoline } from "./trampoline.js";
+import { setImmediate } from "node:timers/promises";
 
 export type Interpreter<R> = (effect: R) => unknown | Promise<unknown>;
 
@@ -40,11 +40,67 @@ export function composeMany<R>(...is: Interpreter<R>[]): Interpreter<R> {
   return is.reduce((acc, i) => compose(acc, i));
 }
 
-/** Run an effect to completion under an interpreter, trampolined. */
+export interface RunOptions {
+  /** Maximum Suspend + Impure transitions. Pure results consume no steps. */
+  maxSteps?: number;
+  /** Cooperative cancellation; does not undo or forcibly stop handler I/O. */
+  signal?: AbortSignal;
+}
+
+export class ExecutionLimitError extends Error {
+  constructor(readonly maxSteps: number) {
+    super(`Execution exceeded its ${maxSteps} step limit`);
+    this.name = "ExecutionLimitError";
+  }
+}
+
+function checkAbort(signal?: AbortSignal): void {
+  signal?.throwIfAborted();
+}
+
+function waitForHandler(value: unknown | Promise<unknown>, signal?: AbortSignal): Promise<unknown> {
+  if (!signal) return Promise.resolve(value);
+  return new Promise((resolve, reject) => {
+    const abort = () => { signal.removeEventListener("abort", abort); reject(signal.reason); };
+    signal.addEventListener("abort", abort, { once: true });
+    // Always observe handler rejection, including after cancellation.
+    Promise.resolve(value).then(
+      result => { signal.removeEventListener("abort", abort); resolve(result); },
+      error => { signal.removeEventListener("abort", abort); reject(error); },
+    );
+    if (signal.aborted) abort();
+  });
+}
+
+/** Iterative evaluation with optional fuel and cooperative cancellation. */
 export async function run<A, R>(
   effect: Effect<A, R>,
-  interpreter: Interpreter<R>
+  interpreter: Interpreter<R>,
+  options: RunOptions = {},
 ): Promise<A> {
-  const tramp = effectToTrampoline(effect, interpreter);
-  return runTrampoline(tramp);
+  const { maxSteps, signal } = options;
+  if (maxSteps !== undefined && (!Number.isSafeInteger(maxSteps) || maxSteps < 0)) {
+    throw new RangeError("maxSteps must be a nonnegative safe integer");
+  }
+  let current = effect;
+  let steps = 0;
+  while (true) {
+    checkAbort(signal);
+    if (current._tag === "Pure") return current.value;
+    if (maxSteps !== undefined && steps >= maxSteps) throw new ExecutionLimitError(maxSteps);
+    // Let timers, cancellation, and other work run during long synchronous chains.
+    if (steps > 0 && steps % 256 === 0) {
+      await setImmediate();
+      checkAbort(signal);
+    }
+    steps++;
+    if (current._tag === "Suspend") {
+      current = current.thunk();
+    } else {
+      const result = await waitForHandler(interpreter(current.effect), signal);
+      checkAbort(signal);
+      current = current.cont(result);
+    }
+  }
 }
+

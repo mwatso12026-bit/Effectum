@@ -28,6 +28,7 @@ If you’re building agents that need to be auditable, testable, and not a ticki
 - Sealed effect algebra and reified effects
 - Composable interpreter machinery (real errors are no longer masked)
 - Stack-safe trampoline (TypeScript implementation)
+- Optional execution step limits and cooperative cancellation through `run` ([usage](docs/execution-controls.md))
 - Basic effects: LLM (mock + hook), Log, State, Memory (active reconsolidation on write, list, search)
 - Optional local JSON memory persistence, with atomic replacement and a previous-version backup
 - Local example agent that runs fully offline
