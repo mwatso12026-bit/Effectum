@@ -33,6 +33,8 @@ The output should be `Package works`. Adjust the archive filename if the version
 
 ## Connect an MCP client
 
+Each user installs their own copy of Effectum. The MCP client launches that user's local server process using stdio; this configuration does not connect to the developer's PC or open a network listening port. The paths below are placeholders, not folders to create literally. Replace them with paths on your own computer. A separate terminal running the server is not required when your MCP client launches it.
+
 Build the source first with `npm.cmd run build`. In your MCP client's configuration, use the absolute path to the compiled server, replacing the example path with your real checkout path:
 
 ```json
@@ -40,7 +42,7 @@ Build the source first with `npm.cmd run build`. In your MCP client's configurat
   "mcpServers": {
     "effectum": {
       "command": "node",
-      "args": ["C:\\Users\\Heather\\Downloads\\Effectum\\dist\\mcp.js"]
+      "args": ["C:\\path\\to\\your\\Effectum\\dist\\mcp.js"]
     }
   }
 }

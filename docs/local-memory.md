@@ -4,6 +4,8 @@ Local persistence is free, requires no account, and makes no network or AI calls
 
 ## Windows MCP setup
 
+Each user runs their own local server and chooses their own data folder. All paths below are placeholders to replace on that user's computer; they do not point to a shared server or another person's PC.
+
 After `npm.cmd ci` and `npm.cmd run build`, add an explicit memory file to your MCP client configuration. Replace both example paths with paths on your PC:
 
 ```json
@@ -11,9 +13,9 @@ After `npm.cmd ci` and `npm.cmd run build`, add an explicit memory file to your 
   "mcpServers": {
     "effectum": {
       "command": "node",
-      "args": ["C:\\Users\\Heather\\Downloads\\Effectum\\dist\\mcp.js"],
+      "args": ["C:\\path\\to\\your\\Effectum\\dist\\mcp.js"],
       "env": {
-        "EFFECTUM_MEMORY_FILE": "C:\\Users\\Heather\\EffectumData\\memory.json"
+        "EFFECTUM_MEMORY_FILE": "C:\\path\\to\\your\\EffectumData\\memory.json"
       }
     }
   }
@@ -45,7 +47,7 @@ Only memory nodes persist. The step counter and recent logs still reset on resta
 ```js
 import { interpretFileMemory, run, writeMemory, readMemory } from 'effectum';
 
-const memory = interpretFileMemory('C:/Users/Heather/EffectumData/memory.json');
+const memory = interpretFileMemory('C:/path/to/your/EffectumData/memory.json');
 await run(writeMemory({
   id: 'welcome', content: 'ReIfy remembers', importance: 1, timestamp: Date.now()
 }), memory);
