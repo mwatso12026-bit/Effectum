@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * Local single-user MCP server for Effectum.
  * Uses yield (not yield*) so the generator algebra works.
@@ -203,3 +204,4 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 const transport = new StdioServerTransport();
 await server.connect(transport);
 console.error("Effectum MCP server running");
+
