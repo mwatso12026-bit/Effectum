@@ -1,6 +1,6 @@
 /**
  * Local single-user MCP server for Effectum.
- * Expanded tools: memory (shared store), state, log, and a richer offline agent.
+ * Tools: memory (list/search/write/read), state, log, richer agent, effect trace.
  * Zero multi-tenant. Zero external infrastructure.
  *
  * Run with: npm run mcp
@@ -14,15 +14,21 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { gen } from "./effect.js";
 import { run, compose } from "./interpreter.js";
-import { writeMemory, readMemory, interpretMemory, type MemoryNode } from "./effects/memory.js";
+import {
+  writeMemory,
+  readMemory,
+  listMemory,
+  searchMemory,
+  interpretMemory,
+} from "./effects/memory.js";
 import { info, interpretLog } from "./effects/log.js";
-import { Get, Put, interpretState } from "./effects/state.js";
 import { LLM, mockLLM } from "./effects/llm.js";
 
 // Shared local single-user store so writes persist across MCP calls
 const memoryInterpreter = interpretMemory();
 let agentStep = 0;
 const logs: string[] = [];
+const traces: unknown[] = [];
 
 const logSink = (level: string, message: string) => {
   logs.push(`[${level}] ${message}`);
@@ -69,6 +75,20 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         },
       },
       {
+        name: "memory_list",
+        description: "List all memory nodes (local single-user)",
+        inputSchema: { type: "object", properties: {} },
+      },
+      {
+        name: "memory_search",
+        description: "Search memory nodes by content or id substring",
+        inputSchema: {
+          type: "object",
+          properties: { query: { type: "string" } },
+          required: ["query"],
+        },
+      },
+      {
         name: "state_get",
         description: "Get the current agent step counter",
         inputSchema: { type: "object", properties: {} },
@@ -109,6 +129,21 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
         },
       },
+      {
+        name: "effect_trace",
+        description: "Run a small program and return a simple reified trace summary",
+        inputSchema: {
+          type: "object",
+          properties: {
+            prompt: { type: "string" },
+          },
+        },
+      },
+      {
+        name: "get_traces",
+        description: "Return recent effect traces",
+        inputSchema: { type: "object", properties: {} },
+      },
     ],
   };
 });
@@ -142,6 +177,26 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           text: result ? JSON.stringify(result) : "not found",
         },
       ],
+    };
+  }
+
+  if (name === "memory_list") {
+    const program = gen(function* () {
+      return yield* listMemory();
+    });
+    const result = await run(program, memoryInterpreter);
+    return {
+      content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+    };
+  }
+
+  if (name === "memory_search") {
+    const program = gen(function* () {
+      return yield* searchMemory(args.query as string);
+    });
+    const result = await run(program, memoryInterpreter);
+    return {
+      content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
     };
   }
 
@@ -197,9 +252,52 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     return { content: [{ type: "text", text: String(result) }] };
   }
 
+  if (name === "effect_trace") {
+    const prompt = (args.prompt as string) ?? "trace me";
+    const trace: string[] = [];
+    const program = gen(function* () {
+      trace.push("log: start");
+      yield* info(`Trace start: ${prompt}`);
+      const answer = yield* LLM({
+        messages: [{ role: "user", content: prompt }],
+      });
+      trace.push(`llm: ${answer}`);
+      yield* writeMemory({
+        id: `trace-${Date.now()}`,
+        content: answer,
+        importance: 0.5,
+        timestamp: Date.now(),
+      });
+      trace.push("memory: written");
+      return answer;
+    });
+
+    const interpreter = compose(
+      compose(
+        mockLLM([`Traced mock for: ${prompt}`]),
+        interpretLog(() => {})
+      ),
+      memoryInterpreter
+    );
+
+    const result = await run(program, interpreter);
+    const summary = { prompt, result, steps: trace };
+    traces.push(summary);
+    if (traces.length > 20) traces.shift();
+    return {
+      content: [{ type: "text", text: JSON.stringify(summary, null, 2) }],
+    };
+  }
+
+  if (name === "get_traces") {
+    return {
+      content: [{ type: "text", text: JSON.stringify(traces, null, 2) }],
+    };
+  }
+
   throw new Error(`Unknown tool: ${name}`);
 });
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
-console.error("Effectum MCP server running (local single-user, expanded tools)");
+console.error("Effectum MCP server running (local single-user, advanced tools)");
