@@ -27,13 +27,28 @@ export type MemoryRead = {
   readonly id: string;
 };
 
-export type Memory = MemoryWrite | MemoryRead;
+export type MemoryList = {
+  readonly _tag: "MemoryList";
+};
+
+export type MemorySearch = {
+  readonly _tag: "MemorySearch";
+  readonly query: string;
+};
+
+export type Memory = MemoryWrite | MemoryRead | MemoryList | MemorySearch;
 
 export const writeMemory = (node: MemoryNode): Effect<void, Memory> =>
   perform({ _tag: "MemoryWrite", node });
 
 export const readMemory = (id: string): Effect<MemoryNode | null, Memory> =>
   perform({ _tag: "MemoryRead", id });
+
+export const listMemory = (): Effect<MemoryNode[], Memory> =>
+  perform({ _tag: "MemoryList" });
+
+export const searchMemory = (query: string): Effect<MemoryNode[], Memory> =>
+  perform({ _tag: "MemorySearch", query });
 
 /**
  * In-memory interpreter with active reconsolidation on write.
@@ -65,6 +80,17 @@ export const interpretMemory = (): Interpreter<Memory> => {
 
     if (effect._tag === "MemoryRead") {
       return store.get(effect.id) ?? null;
+    }
+
+    if (effect._tag === "MemoryList") {
+      return Array.from(store.values());
+    }
+
+    if (effect._tag === "MemorySearch") {
+      const q = effect.query.toLowerCase();
+      return Array.from(store.values()).filter(
+        (n) => n.content.toLowerCase().includes(q) || n.id.toLowerCase().includes(q)
+      );
     }
 
     throw new NotAnEffectError();
