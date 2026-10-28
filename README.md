@@ -29,6 +29,7 @@ If you’re building agents that need to be auditable, testable, and not a ticki
 - Composable interpreter machinery (real errors are no longer masked)
 - Stack-safe trampoline (TypeScript implementation)
 - Optional execution step limits and cooperative cancellation through `run` ([usage](docs/execution-controls.md))
+- Local per-effect permissions and approval callbacks ([usage and offline demo](docs/permissions.md))
 - Basic effects: LLM (mock + hook), Log, State, Memory (active reconsolidation on write, list, search)
 - Optional local JSON memory persistence, with atomic replacement and a previous-version backup
 - Local example agent that runs fully offline
@@ -40,7 +41,7 @@ If you’re building agents that need to be auditable, testable, and not a ticki
 - Managed cloud interpreters and provider routing
 - Automated background reconsolidation / memory workers
 - Multi-tenant Postgres adapter and team spaces
-- Policy / approval gateways with audit logs
+- Hosted organization-wide policy / approval gateways with managed audit logs
 - Web dashboard for effect traces and memory graphs
 - Enterprise SLA, on-prem, and custom connectors
 
