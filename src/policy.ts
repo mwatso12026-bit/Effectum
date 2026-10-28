@@ -1,4 +1,6 @@
 import type { Interpreter } from "./interpreter.js";
+import { randomUUID } from "node:crypto";
+import type { ExecutionTrace, TraceStage } from "./trace.js";
 
 export type PolicyDecision = "allow" | "deny" | "approve";
 
@@ -16,6 +18,8 @@ export interface PolicyOptions<R extends { readonly _tag: string }> {
   approve?: (request: Readonly<R>) => boolean | Promise<boolean>;
   /** Pass the same signal to run() to cancel a pending approval promptly. */
   signal?: AbortSignal;
+  /** Optional bounded metadata-only trace of this policy boundary. */
+  trace?: ExecutionTrace;
 }
 
 function freezeRequest(value: unknown, seen = new WeakSet<object>()): void {
@@ -45,19 +49,47 @@ export function withPolicy<R extends { readonly _tag: string }>(
       throw new TypeError("Invalid policy decision");
     }
   }
-  const { approve, signal } = options;
+  const { approve, signal, trace } = options;
   return async (effect) => {
-    signal?.throwIfAborted();
-    const request = structuredClone(effect);
-    freezeRequest(request);
-    const decision = rules.get(request._tag) ?? "deny";
-    if (decision === "deny") throw new PermissionDeniedError(request._tag);
-    if (decision === "approve") {
-      if (!approve || await approve(request) !== true) {
-        throw new PermissionDeniedError(request._tag, `Approval required or declined for ${request._tag}`);
+    const requestId = randomUUID();
+    const effectTag = effect._tag;
+    let terminal = false;
+    let started = false;
+    const emit = (stage: TraceStage) => {
+      if (terminal) return;
+      trace?.record(requestId, effectTag, stage);
+      terminal = ["completed", "failed", "denied", "cancelled"].includes(stage);
+    };
+    const abort = () => emit("cancelled");
+    emit("requested");
+    signal?.addEventListener("abort", abort, { once: true });
+    try {
+      signal?.throwIfAborted();
+      const request = structuredClone(effect);
+      freezeRequest(request);
+      const decision = rules.get(request._tag) ?? "deny";
+      if (decision === "deny") throw new PermissionDeniedError(request._tag);
+      if (decision === "approve") {
+        emit("approval_required");
+        if (!approve || await approve(request) !== true) {
+          throw new PermissionDeniedError(request._tag, `Approval required or declined for ${request._tag}`);
+        }
+        emit("approved");
+      } else {
+        emit("allowed");
       }
+      signal?.throwIfAborted();
+      started = true;
+      emit("started");
+      const result = await interpreter(request);
+      signal?.throwIfAborted();
+      emit("completed");
+      return result;
+    } catch (error) {
+      emit(signal?.aborted ? "cancelled" : !started && error instanceof PermissionDeniedError ? "denied" : "failed");
+      throw error;
+    } finally {
+      signal?.removeEventListener("abort", abort);
     }
-    signal?.throwIfAborted();
-    return interpreter(request);
   };
 }

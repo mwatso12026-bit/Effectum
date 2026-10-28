@@ -30,6 +30,7 @@ If you’re building agents that need to be auditable, testable, and not a ticki
 - Stack-safe trampoline (TypeScript implementation)
 - Optional execution step limits and cooperative cancellation through `run` ([usage](docs/execution-controls.md))
 - Local per-effect permissions and approval callbacks ([usage and offline demo](docs/permissions.md))
+- Bounded local execution traces with metadata-only JSON export ([usage and demo](docs/execution-traces.md))
 - Basic effects: LLM (mock + hook), Log, State, Memory (active reconsolidation on write, list, search)
 - Optional local JSON memory persistence, with atomic replacement and a previous-version backup
 - Local example agent that runs fully offline
