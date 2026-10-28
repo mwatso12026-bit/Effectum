@@ -12,6 +12,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { gen } from "./effect.js";
 import { run } from "./interpreter.js";
+import { interpretFileMemory } from "./effects/file-memory.js";
 import {
   writeMemory,
   readMemory,
@@ -20,7 +21,8 @@ import {
   interpretMemory,
 } from "./effects/memory.js";
 
-const memoryInterpreter = interpretMemory();
+const memoryFile = process.env.EFFECTUM_MEMORY_FILE;
+const memoryInterpreter = memoryFile ? interpretFileMemory(memoryFile) : interpretMemory();
 let agentStep = 0;
 const logs: string[] = [];
 
@@ -197,7 +199,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     return { content: [{ type: "text", text: `Unknown tool: ${name}` }] };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    return { content: [{ type: "text", text: `Error: ${msg}` }] };
+    return { isError: true, content: [{ type: "text", text: `Error: ${msg}` }] };
   }
 });
 

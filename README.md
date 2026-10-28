@@ -29,6 +29,7 @@ If you’re building agents that need to be auditable, testable, and not a ticki
 - Composable interpreter machinery (real errors are no longer masked)
 - Stack-safe trampoline (TypeScript implementation)
 - Basic effects: LLM (mock + hook), Log, State, Memory (active reconsolidation on write, list, search)
+- Optional local JSON memory persistence, with atomic replacement and a previous-version backup
 - Local example agent that runs fully offline
 - Advanced MCP server (stdio, local single-user tools)
 - Lean trampoline model (partial / sketch)
@@ -107,7 +108,7 @@ The effect is pure data. The model string is just a field. Your interpreter choo
 
 ## MCP server (local single-user)
 
-A stdio MCP server is included. Shared in-memory store so writes persist across calls in one process. Memory, state, and logs are lost when the process exits; there is no disk persistence yet.
+A stdio MCP server is included. By default memory, state, and logs are in RAM and are lost when the process exits. Set `EFFECTUM_MEMORY_FILE` to an absolute file path to retain memory across restarts. State and logs remain in RAM. See [local memory storage](docs/local-memory.md) for setup, backup, and recovery.
 
 Tools:
 

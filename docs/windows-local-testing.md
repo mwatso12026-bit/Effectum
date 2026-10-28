@@ -46,7 +46,7 @@ Build the source first with `npm.cmd run build`. In your MCP client's configurat
 }
 ```
 
-Restart the client after changing its configuration. It should list eight tools, including `memory_write`, `memory_read`, and `memory_search`. Write a memory and read it back in the same server session. Memory is currently held in RAM and is lost when the server restarts.
+Restart the client after changing its configuration. It should list eight tools, including `memory_write`, `memory_read`, and `memory_search`. Write a memory and read it back in the same server session. By default memory is held in RAM and lost when the server restarts. Follow [local memory storage](local-memory.md) to enable and test persistence across restarts.
 
 For a package installed in another project, the server path is `<project>\\node_modules\\effectum\\dist\\mcp.js`. The installed command is also available as `effectum-mcp` from npm scripts or `npx.cmd --no-install effectum-mcp` within that project. Direct Node launch is recommended in MCP client configurations.
 
