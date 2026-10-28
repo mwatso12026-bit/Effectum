@@ -28,8 +28,9 @@ If you’re building agents that need to be auditable, testable, and not a ticki
 - Sealed effect algebra and reified effects
 - Composable interpreter machinery (real errors are no longer masked)
 - Stack-safe trampoline (TypeScript implementation)
-- Basic effects: LLM (mock + hook), Log, State
+- Basic effects: LLM (mock + hook), Log, State, Memory (active reconsolidation on write)
 - Local example agent that runs fully offline
+- Minimal MCP server (stdio, local single-user tools)
 - Lean trampoline model (partial / sketch)
 
 ## What is commercial
@@ -52,7 +53,7 @@ type Effect<
 > = Pure<A> | Impure<R, A> | Suspend<() => Effect<A, R>>;
 
 // The row is sealed. You only get the effects you declare.
-type EffectRow = LLM | Log | State | ...;
+type EffectRow = LLM | Log | State | Memory | ...;
 ```
 
 ### Reified Effects
@@ -68,7 +69,8 @@ Handlers throw `NotAnEffectError` for mismatches; real errors propagate.
 const interpreter = compose(
   interpretLLM({ call: yourProvider }),  // OpenAI, Anthropic, local, whatever
   interpretLog(console),
-  interpretState(initial)
+  interpretState(initial),
+  interpretMemory()
 );
 
 run(program, interpreter);
@@ -80,7 +82,8 @@ Want to test without burning tokens? Drop in a mock:
 const testInterpreter = compose(
   mockLLM(["canned response 1", "canned response 2"]),
   interpretLog(() => {}),
-  interpretState(0)
+  interpretState(0),
+  interpretMemory()
 );
 ```
 
@@ -101,6 +104,21 @@ const answer = yield* LLM({
 
 The effect is pure data. The model string is just a field. Your interpreter chooses the actual provider. No hard-coded vendor lock-in.
 
+## Minimal MCP server (local single-user)
+
+A thin stdio MCP server is included. It exposes:
+
+- `memory_write` — write a node with active reconsolidation
+- `memory_read` — read a node by id
+- `run_mock_agent` — run the offline example agent
+
+```bash
+npm install
+npm run mcp
+```
+
+Point Cursor, Claude Desktop, or any MCP client at the stdio process. No accounts, no network required for the mock tools.
+
 ## Quick start (MIT core — local single-user)
 
 ```bash
@@ -110,6 +128,7 @@ npm install
 npm run build
 npm run example   # offline mock agent
 npm test          # local single-user tests
+npm run mcp       # local MCP server
 ```
 
 Or, once published:
@@ -125,10 +144,12 @@ src/
   effect.ts          # sealed effect algebra (MIT)
   trampoline.ts      # stack-safe evaluation (MIT)
   interpreter.ts     # composable interpreter machinery (MIT)
+  mcp.ts             # minimal local MCP server (MIT)
   effects/
     llm.ts           # LLM effect + mock + real interpreter hook (MIT)
     log.ts
     state.ts
+    memory.ts        # active reconsolidation on write (MIT)
   examples/
     agent.ts         # tiny local agent (MIT)
     agent.test.ts    # local single-user test (MIT)
