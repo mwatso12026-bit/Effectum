@@ -142,7 +142,7 @@ npm run mcp       # local MCP server
 Or, once published:
 
 ```bash
-npm install effectum
+npm install @effectumcore/effectum
 ```
 
 ## Repo layout
