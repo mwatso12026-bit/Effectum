@@ -6,7 +6,7 @@ const pkg = JSON.parse(readFileSync("package.json", "utf8"));
 assert.equal(pkg.name, "@effectumcore/effectum");
 assert.equal(pkg.bin?.["effectum-mcp"], "dist/mcp.js");
 assert.equal(pkg.scripts?.prepack, "npm run build");
-const pack = JSON.parse(execFileSync("npm", ["pack", "--dry-run", "--json"], { encoding: "utf8" }))[0];
+const pack = JSON.parse(execFileSync(process.platform === "win32" ? "npm.cmd" : "npm", ["pack", "--dry-run", "--json"], { encoding: "utf8", shell: process.platform === "win32" }))[0];
 const files = new Set(pack.files.map((file) => file.path));
 for (const path of ["dist/index.js", "dist/index.d.ts", "dist/mcp.js"]) {
   assert.ok(files.has(path), `Missing packaged file: ${path}`);
