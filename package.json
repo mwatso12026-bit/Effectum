@@ -15,7 +15,8 @@
     "build": "tsc",
     "example": "tsx src/examples/agent.ts",
     "test": "tsx --test src/**/*.test.ts",
-    "mcp": "tsx src/mcp.ts"
+    "mcp": "node dist/mcp.js",
+    "prepack": "npm run build"
   },
   "keywords": [
     "effects",
@@ -41,5 +42,11 @@
     "@types/node": "^22.0.0",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0"
+  },
+  "bin": {
+    "effectum-mcp": "dist/mcp.js"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

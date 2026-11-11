@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * Local single-user MCP server for Effectum.
  * Uses yield (not yield*) so the generator algebra works.
