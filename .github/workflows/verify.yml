@@ -30,5 +30,7 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm test
+      - name: Smoke test compiled MCP server
+        run: node scripts/smoke-mcp.mjs
       - name: Verify publish package and MCP executable
         run: node scripts/verify-package.mjs

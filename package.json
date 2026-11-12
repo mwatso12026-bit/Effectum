@@ -1,6 +1,6 @@
 {
   "name": "@effectumcore/effectum",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Local single-user sealed effect algebra runtime. Reified effects, composable interpreters, stack-safe trampoline. LLM calls are just effects. MIT core.",
   "type": "module",
   "main": "dist/index.js",
