@@ -1,0 +1,29 @@
+name: Feedback / question
+description: Ideas, docs gaps, or how-to questions for the free harness.
+title: "[feedback]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Open-core scope: **this repo + npm** only. Pro features live at **effectum-pro.com**.
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What are you building or trying to do?
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Feedback or question
+    validations:
+      required: true
+  - type: checkboxes
+    id: tried
+    attributes:
+      label: Checklist
+      options:
+        - label: I read the README quick start
+        - label: I installed from npm `@effectumcore/effectum`

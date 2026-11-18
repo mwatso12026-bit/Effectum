@@ -1,6 +1,6 @@
 {
   "name": "@effectumcore/effectum",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Local single-user sealed effect algebra runtime. Reified effects, composable interpreters, stack-safe trampoline. LLM calls are just effects. MIT core.",
   "type": "module",
   "main": "dist/index.js",
@@ -9,7 +9,9 @@
     "dist",
     "README.md",
     "LICENSE",
-    "lean"
+    "lean",
+    "docs/assets/hero-banner.png",
+    "docs/assets/lava-divider.png"
   ],
   "scripts": {
     "build": "tsc",
@@ -40,6 +42,7 @@
     "url": "https://github.com/mwatso12026-bit/Effectum/issues"
   },
   "dependencies": {
+    "@effectumcore/effectum": "^0.1.2",
     "@modelcontextprotocol/sdk": "^1.0.0"
   },
   "devDependencies": {
