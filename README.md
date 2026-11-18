@@ -9,6 +9,8 @@
 
 <br />
 
+> **This GitHub repo is the free product.** It exists so builders can install the MIT harness, try agents offline, and decide when they need **Effectum Pro** — sold only at **[effectum-pro.com](https://effectum-pro.com)** (not on npm, not in this repo).
+
 **A local, single-user sealed effect runtime** — effects are data, interpreters are composable, LLM calls are ordinary effects. No hidden I/O.
 
 <table>
@@ -34,7 +36,9 @@ MIT forever · local MCP · mock agents · your API keys
 
 Paid download · execution stays on your machine
 
-**[→ effectum-pro.com](https://effectum-pro.com)** (Solo from $149/yr, launch **LAUNCH99**)
+**[→ effectum-pro.com](https://effectum-pro.com)** — buy & download (Solo from $149/yr, launch **LAUNCH99**)
+
+*Pro is how we monetize; this repo stays MIT.*
 
 </td>
 </tr>
