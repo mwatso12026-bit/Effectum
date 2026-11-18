@@ -1,53 +1,78 @@
-# Effectum
+<div align="center">
 
-**A local, single-user sealed effect runtime for controlled, testable, auditable AI agents.**
+[![npm](https://img.shields.io/npm/v/@effectumcore/effectum?style=for-the-badge&label=%40effectumcore%2Feffectum&color=e11d2e&logo=npm)](https://www.npmjs.com/package/@effectumcore/effectum)
+[![license: MIT](https://img.shields.io/badge/license-MIT-050505?style=for-the-badge&labelColor=e11d2e)](LICENSE)
 
-You write pure programs. Effects are sealed, reified data. Interpreters are pure functions you compose. The trampoline is stack-safe. An LLM call is just another effect: no special privileges, no hidden I/O.
+<img src="docs/assets/hero-banner.svg" width="100%" alt="Effectum — free MIT harness on npm; Effectum Pro at effectum-pro.com" />
+
+</div>
+
+<br />
+
+**A local, single-user sealed effect runtime** — effects are data, interpreters are composable, LLM calls are ordinary effects. No hidden I/O.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### Free harness (this repo)
 
 ```bash
 npm install @effectumcore/effectum
 ```
 
-[![npm](https://img.shields.io/npm/v/@effectumcore/effectum)](https://www.npmjs.com/package/@effectumcore/effectum)
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+MIT forever · local MCP · mock agents · your API keys
 
----
+[Quick start ↓](#quick-start)
 
-## The Effectum family
+</td>
+<td width="50%" valign="top">
 
-Effectum comes in three products. **This repository is the free one.**
+### Effectum Pro
 
-| | **Effectum** (this repo) | **Effectum Pro** | **Effectum Commercial** |
-|---|---|---|---|
-| **License** | MIT, free forever | Paid commercial license | Paid, by agreement |
-| **Runs** | Local, single user | Local, licensed download | Hosted or on-prem |
-| **Best for** | Trying it out, side projects, building on the core | Solo developers and small teams who want speed and proof | Organizations needing multi-tenant, policy, and SLAs |
-| **Includes** | Sealed effect algebra, reified effects, composable interpreters, stack-safe trampoline, mock LLM agent, local MCP server | Everything in Effectum, plus the features below | Everything in Pro, plus the features below |
+**Parallel laws · Merkle audit · spot checks · local scheduler**
 
-### Effectum Pro: the local upgrade
+Paid download · execution stays on your machine
 
-Same offline, no-cloud model, with the features that make runs faster and verifiable:
+**[→ effectum-pro.com](https://effectum-pro.com)** (Solo from $149/yr, launch **LAUNCH99**)
 
-- **Commute-law mining:** replays your runs to discover when effect order does not matter, then promotes those laws so effects can run in parallel.
-- **Merkle audit spine:** SHA-256 hash-chained step logs, so any edited step breaks the chain.
-- **Optimistic spot audit:** re-executes random steps; you choose the fault assumption.
-- **Local FIFO scheduler:** your queue, on your disk.
+</td>
+</tr>
+</table>
 
-Solo, Team, and Enterprise licenses are available at **[effectum-pro.com](https://effectum-pro.com)**.
+<div align="center">
+<img src="docs/assets/lava-divider.svg" width="100%" alt="" />
+</div>
 
-### Effectum Commercial: hosted and enterprise
+### The agent problem
 
-- An evolved trampoline: the execution core has advanced well beyond the one in this repository
-- Managed cloud interpreters and provider routing
-- Automated background reconsolidation and memory workers
-- Multi-tenant Postgres adapter and team memory spaces
-- Policy and approval gateways with audit logs
-- Web dashboard for effect traces and memory graphs
-- SLA, on-prem deployment, and custom connectors
+| Hidden actions | Broad permissions | Runaway calls | Weak verification |
+| :--- | :--- | :--- | :--- |
+| Side effects before review | Tool scope grows | Retries multiply cost | Final state hides drift |
 
-Contact us via [effectum-pro.com](https://effectum-pro.com) to discuss.
+**Effectum’s answer:** describe effects as values → **inspect** → interpret behind policy → **record**.
 
-> **Open-core promise:** everything under `src/` and `lean/` in this repository is MIT-licensed and stays that way, for personal and commercial use. Pro and Commercial are separate products that are not contained in this repository.
+<div align="center">
+<img src="docs/assets/lava-divider.svg" width="100%" alt="" />
+</div>
+
+## Product line
+
+| | **Effectum** (here) | **[Effectum Pro](https://effectum-pro.com)** | **Effectum Commercial** |
+| :--- | :--- | :--- | :--- |
+| License | MIT | Commercial | By agreement |
+| Where it runs | Local, npm | Local download | Hosted / on-prem |
+| Best for | Build & learn | Speed + proof on your machine | Multi-tenant, SLA |
+
+> **Open-core promise:** `src/` and `lean/` stay MIT. Pro and Commercial are separate products (not in this repo).
+
+<details>
+<summary><strong>Effectum Commercial</strong> (hosted / enterprise — contact via effectum-pro.com)</summary>
+
+- Evolved trampoline and managed interpreters  
+- Multi-tenant memory, policy gateways, dashboard, SLA / on-prem  
+
+</details>
 
 ---
 

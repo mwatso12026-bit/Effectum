@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-label="Effectum open source agent runtime">
+  <rect width="1280" height="640" fill="#050505"/>
+  <path fill="#111" d="M0 420h480v220H0zm500 380h280v260H500zm800 340h480v300H800z"/>
+  <path fill="#e11d2e" opacity="0.7" d="M0 430h1280v16H0z"/>
+  <path fill="#ff4d5a" opacity="0.25" d="M0 432h1280v8H0z"/>
+  <text x="72" y="200" fill="#f5f5f5" font-family="Segoe UI, system-ui, sans-serif" font-size="64" font-weight="800">EFFECTUM</text>
+  <text x="72" y="280" fill="#e11d2e" font-family="Segoe UI, system-ui, sans-serif" font-size="44" font-weight="700">Free MIT harness on npm</text>
+  <text x="72" y="340" fill="#a3a3a3" font-family="Segoe UI, system-ui, sans-serif" font-size="28">Reified effects · interpreters · local MCP</text>
+  <text x="72" y="520" fill="#f5f5f5" font-family="Segoe UI, system-ui, sans-serif" font-size="26">Pro: effectum-pro.com</text>
+</svg>
