@@ -35,6 +35,10 @@
     "type": "git",
     "url": "git+https://github.com/mwatso12026-bit/Effectum.git"
   },
+  "homepage": "https://github.com/mwatso12026-bit/Effectum#readme",
+  "bugs": {
+    "url": "https://github.com/mwatso12026-bit/Effectum/issues"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0"
   },
