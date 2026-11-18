@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/@effectumcore/effectum?style=for-the-badge&label=%40effectumcore%2Feffectum&color=e11d2e&logo=npm)](https://www.npmjs.com/package/@effectumcore/effectum)
 [![license: MIT](https://img.shields.io/badge/license-MIT-050505?style=for-the-badge&labelColor=e11d2e)](LICENSE)
 
-<img src="docs/assets/hero-banner.svg" width="100%" alt="Effectum — free MIT harness on npm; Effectum Pro at effectum-pro.com" />
+<img src="docs/assets/hero-banner.png" width="100%" alt="Effectum — free MIT harness on npm; Effectum Pro at effectum-pro.com" />
 
 </div>
 
@@ -41,7 +41,7 @@ Paid download · execution stays on your machine
 </table>
 
 <div align="center">
-<img src="docs/assets/lava-divider.svg" width="100%" alt="" />
+<img src="docs/assets/lava-divider.png" width="100%" alt="" />
 </div>
 
 ### The agent problem
@@ -53,7 +53,7 @@ Paid download · execution stays on your machine
 **Effectum’s answer:** describe effects as values → **inspect** → interpret behind policy → **record**.
 
 <div align="center">
-<img src="docs/assets/lava-divider.svg" width="100%" alt="" />
+<img src="docs/assets/lava-divider.png" width="100%" alt="" />
 </div>
 
 ## Product line
