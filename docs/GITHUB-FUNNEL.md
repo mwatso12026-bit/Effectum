@@ -31,10 +31,26 @@ GitHub README (hero + story)
     → effectum-pro.com  (Stripe → download)
 ```
 
-## One-time setup (owner, ~2 min)
+## Owner checklist (GitHub hub)
 
-1. **Social preview:** Settings → upload `docs/assets/social-preview.png`.
-2. **About description:** “Free MIT local agent runtime. Upgrade: effectum-pro.com”
-3. **Pin** this repo on your profile if you want max visibility.
+**npm (done):** `@effectumcore/effectum` **0.1.2** on [npmjs.com](https://www.npmjs.com/package/@effectumcore/effectum). README badge updates automatically from shields.io.
 
-Effectum-Pro stays private; do **not** expect the public to see Pro’s README — only this repo + the site.
+### Already set on the repo (verify)
+
+| Item | Target |
+|------|--------|
+| **About → Description** | Free MIT local agent runtime … Upgrade: effectum-pro.com |
+| **About → Website** | https://effectum-pro.com |
+| **Topics** | agents, mcp, effectum, typescript, local-first, … |
+
+### You do in the browser (~3 min)
+
+1. **Social preview** — [Repo Settings → General](https://github.com/mwatso12026-bit/Effectum/settings) → **Social preview** → upload  
+   `C:\Users\Heather\Documents\GitHub\Effectum\docs\assets\social-preview.png`  
+   (Use **PNG**, not SVG.)
+
+2. **Pin on profile** — [Your profile](https://github.com/mwatso12026-bit?tab=repositories) → **Customize pins** → pin **Effectum**.
+
+3. **Push git to match npm** — commit `package.json` / `package-lock.json` at **0.1.2** on `main` (PR if branch is protected).
+
+Effectum-Pro stays private; public funnel is **this repo + npm + effectum-pro.com**.

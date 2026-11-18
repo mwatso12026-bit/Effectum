@@ -1,0 +1,48 @@
+name: Bug report
+description: Something broke in @effectumcore/effectum (build, test, MCP, examples).
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing the MIT core. Upgrade path for Pro: **https://effectum-pro.com**
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect vs what you saw?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: npm install, commands run, minimal snippet
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: npm version
+      placeholder: e.g. 0.1.2
+    validations:
+      required: true
+  - type: input
+    id: node
+    attributes:
+      label: Node version
+      placeholder: node -v
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other
+    validations:
+      required: true

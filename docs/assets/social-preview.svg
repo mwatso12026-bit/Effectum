@@ -1,10 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-label="Effectum open source agent runtime">
+  <defs>
+    <linearGradient id="lava" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7a1018" stop-opacity="0"/>
+      <stop offset="35%" stop-color="#e11d2e" stop-opacity="0.95"/>
+      <stop offset="65%" stop-color="#ff4d5a" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#7a1018" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
   <rect width="1280" height="640" fill="#050505"/>
-  <path fill="#111" d="M0 420h480v220H0zm500 380h280v260H500zm800 340h480v300H800z"/>
-  <path fill="#e11d2e" opacity="0.7" d="M0 430h1280v16H0z"/>
-  <path fill="#ff4d5a" opacity="0.25" d="M0 432h1280v8H0z"/>
-  <text x="72" y="200" fill="#f5f5f5" font-family="Segoe UI, system-ui, sans-serif" font-size="64" font-weight="800">EFFECTUM</text>
-  <text x="72" y="280" fill="#e11d2e" font-family="Segoe UI, system-ui, sans-serif" font-size="44" font-weight="700">Free MIT harness on npm</text>
-  <text x="72" y="340" fill="#a3a3a3" font-family="Segoe UI, system-ui, sans-serif" font-size="28">Reified effects · interpreters · local MCP</text>
-  <text x="72" y="520" fill="#f5f5f5" font-family="Segoe UI, system-ui, sans-serif" font-size="26">Pro: effectum-pro.com</text>
+  <path fill="#111" d="M100 420h280v180H100zm380 400h220v200H380zm780 380h300v220H780z"/>
+  <text x="640" y="108" text-anchor="middle" fill="#f5f5f5" font-family="Segoe UI, system-ui, sans-serif" font-size="64" font-weight="800">EFFECTUM</text>
+  <text x="640" y="158" text-anchor="middle" fill="#a3a3a3" font-family="Segoe UI, system-ui, sans-serif" font-size="26">Local sealed-effect runtime for inspectable AI agents</text>
+  <text x="640" y="206" text-anchor="middle" fill="#f5f5f5" font-family="Segoe UI, system-ui, sans-serif" font-size="30" font-weight="700">AI agents act.</text>
+  <text x="640" y="244" text-anchor="middle" fill="#e11d2e" font-family="Segoe UI, system-ui, sans-serif" font-size="30" font-weight="700">Can you verify what they did?</text>
+  <text x="640" y="292" text-anchor="middle" fill="#c4c4c4" font-family="Segoe UI, system-ui, sans-serif" font-size="24">Effects as data: inspect, then interpret behind policy, then record</text>
+  <text x="640" y="328" text-anchor="middle" fill="#737373" font-family="Segoe UI, system-ui, sans-serif" font-size="22">No hidden I/O - composable interpreters - local MCP - MIT core</text>
+  <text x="640" y="368" text-anchor="middle" fill="#525252" font-family="Segoe UI, Consolas, monospace" font-size="22">npm install @effectumcore/effectum</text>
+  <path fill="#e11d2e" opacity="0.75" d="M64 458h1152v10H64z"/>
+  <path fill="url(#lava)" d="M0 466h1280v12H0z"/>
+  <rect x="430" y="508" width="198" height="40" rx="4" fill="#e11d2e"/>
+  <text x="529" y="534" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, system-ui, sans-serif" font-size="15" font-weight="700">FREE ON NPM</text>
+  <rect x="652" y="508" width="198" height="40" rx="4" fill="none" stroke="#f5f5f5" stroke-width="2"/>
+  <text x="751" y="534" text-anchor="middle" fill="#f5f5f5" font-family="Segoe UI, system-ui, sans-serif" font-size="15" font-weight="700">effectum-pro.com</text>
+  <text x="640" y="592" text-anchor="middle" fill="#737373" font-family="Segoe UI, system-ui, sans-serif" font-size="18">Effectum Pro: parallel laws, Merkle audit, local scheduler</text>
 </svg>

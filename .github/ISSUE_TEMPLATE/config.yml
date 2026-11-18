@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Effectum Pro (commercial)
+    url: https://effectum-pro.com
+    about: Paid download, audit, and support — not in this MIT repo.
+  - name: npm package
+    url: https://www.npmjs.com/package/@effectumcore/effectum
+    about: Install the free MIT harness from npm.
